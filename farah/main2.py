@@ -4,7 +4,7 @@ from algo import bfs
 # Load puzzle
 puzzle = RushHourPuzzle(csv_file="examples/2-b.csv")
 
-print("Initial state:")
+print("Initial State:")
 print(puzzle)
 
 # Run BFS
@@ -13,7 +13,7 @@ solution_node = bfs(puzzle)
 if solution_node:
     print(f"\nSolution found in {solution_node.g} moves!")
     print("Moves:", solution_node.getSolution())
-    print("\nFINAL STATE:")
+    print("\nFinal State:")
     print(solution_node.state)    
 
 else:
