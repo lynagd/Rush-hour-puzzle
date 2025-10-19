@@ -4,7 +4,7 @@ Main script to run the puzzle solver with different algorithms.
 """
 
 from rush_hour_puzzle import RushHourPuzzle
-from search_algorithms import BFS, A_star, heuristic_h1, heuristic_h2, heuristic_h3
+from search_algorithms import BFS
 from game_interface import visualize_solution
 import time
 
@@ -84,65 +84,8 @@ def solve_puzzle(csv_file, use_visualization=True):
         print(f"✓ Solution cost: {bfs_solution.g} moves")
         print(f"✓ Time taken: {bfs_time:.4f} seconds")
     
-    # ===== A* with h1 =====
-    print("\n" + "-"*60)
-    print("Running A* Algorithm with Heuristic h1...")
-    print("(h1 = distance from red car to exit)")
-    print("-"*60)
-    start_time = time.time()
-    astar_h1_solution, astar_h1_steps = A_star(initial_state, heuristic_h1)
-    astar_h1_time = time.time() - start_time
-    
-    if astar_h1_solution:
-        results['A* (h1)'] = {
-            'solution': astar_h1_solution,
-            'steps': astar_h1_steps,
-            'time': astar_h1_time,
-            'cost': astar_h1_solution.g
-        }
-        print(f"✓ Solution found in {astar_h1_steps} search steps")
-        print(f"✓ Solution cost: {astar_h1_solution.g} moves")
-        print(f"✓ Time taken: {astar_h1_time:.4f} seconds")
-    
-    # ===== A* with h2 =====
-    print("\n" + "-"*60)
-    print("Running A* Algorithm with Heuristic h2...")
-    print("(h2 = h1 + number of blocking vehicles)")
-    print("-"*60)
-    start_time = time.time()
-    astar_h2_solution, astar_h2_steps = A_star(initial_state, heuristic_h2)
-    astar_h2_time = time.time() - start_time
-    
-    if astar_h2_solution:
-        results['A* (h2)'] = {
-            'solution': astar_h2_solution,
-            'steps': astar_h2_steps,
-            'time': astar_h2_time,
-            'cost': astar_h2_solution.g
-        }
-        print(f"✓ Solution found in {astar_h2_steps} search steps")
-        print(f"✓ Solution cost: {astar_h2_solution.g} moves")
-        print(f"✓ Time taken: {astar_h2_time:.4f} seconds")
-    
-    # ===== A* with h3 =====
-    print("\n" + "-"*60)
-    print("Running A* Algorithm with Heuristic h3...")
-    print("(h3 = h2 + penalty for stuck blocking vehicles)")
-    print("-"*60)
-    start_time = time.time()
-    astar_h3_solution, astar_h3_steps = A_star(initial_state, heuristic_h3)
-    astar_h3_time = time.time() - start_time
-    
-    if astar_h3_solution:
-        results['A* (h3)'] = {
-            'solution': astar_h3_solution,
-            'steps': astar_h3_steps,
-            'time': astar_h3_time,
-            'cost': astar_h3_solution.g
-        }
-        print(f"✓ Solution found in {astar_h3_steps} search steps")
-        print(f"✓ Solution cost: {astar_h3_solution.g} moves")
-        print(f"✓ Time taken: {astar_h3_time:.4f} seconds")
+    # NOTE: A* runs are intentionally disabled/commented out so only BFS is executed.
+    # If you want to re-enable A*, restore the imports at top and the blocks below.
     
     # ===== Comparison =====
     print("\n" + "="*60)
@@ -161,44 +104,25 @@ def solve_puzzle(csv_file, use_visualization=True):
         print(f"🏆 Most efficient: {best_algo[0]} with {best_algo[1]['steps']} search steps")
         print("="*60)
     
-    # Show visualization
-    if use_visualization and results:
+    # Show visualization (BFS only)
+    if use_visualization and 'BFS' in results:
         print("\n" + "="*60)
         print("VISUALIZATION")
         print("="*60)
-        print("\nChoose algorithm to visualize:")
-        print("1. BFS")
-        print("2. A* with h1")
-        print("3. A* with h2")
-        print("4. A* with h3")
+        print("\nLaunching visualization for BFS...")
+        print("\nControls:")
+        print("  SPACE - Start/Stop animation")
+        print("  LEFT/RIGHT ARROWS - Step through solution")
+        print("  R - Reset to start")
+        print("  ESC - Close window")
         
-        choice = input("\nEnter choice (1-4, or press Enter for BFS): ").strip()
-        
-        algo_map = {
-            '1': 'BFS',
-            '2': 'A* (h1)',
-            '3': 'A* (h2)',
-            '4': 'A* (h3)',
-            '': 'BFS'
-        }
-        
-        selected_algo = algo_map.get(choice, 'BFS')
-        
-        if selected_algo in results:
-            print(f"\nLaunching visualization for {selected_algo}...")
-            print("\nControls:")
-            print("  SPACE - Start/Stop animation")
-            print("  LEFT/RIGHT ARROWS - Step through solution")
-            print("  R - Reset to start")
-            print("  ESC - Close window")
-            
-            data = results[selected_algo]
-            visualize_solution(
-                initial_state,
-                data['solution'],
-                selected_algo,
-                data['steps']
-            )
+        data = results['BFS']
+        visualize_solution(
+            initial_state,
+            data['solution'],
+            'BFS',
+            data['steps']
+        )
 
 
 def main():

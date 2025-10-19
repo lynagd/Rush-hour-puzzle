@@ -78,17 +78,15 @@ def BFS(initial_state):
 def heuristic_h1(state):
     """
     Heuristic 1: Distance from red car 'X' to the exit.
-    
-    The exit is at position (board_width - 2, board_height/2 - 1).
-    For a horizontal car, we calculate horizontal distance.
     """
     # Find the red car 'X'
     for vehicle in state.vehicles:
         if vehicle['id'] == 'X':
+            # Use same exit as isGoal: leftmost x position for X should be board_width - 2
             target_x = state.board_width - 2
             current_x = vehicle['x']
             
-            # Distance to exit
+            # Distance to exit (number of left/right moves needed)
             distance = target_x - current_x
             return max(0, distance)  # Never negative
     
@@ -98,8 +96,6 @@ def heuristic_h1(state):
 def heuristic_h2(state):
     """
     Heuristic 2: h1 + number of blocking vehicles.
-    
-    Counts vehicles that block the red car's path to the exit.
     """
     h1 = heuristic_h1(state)
     
@@ -116,16 +112,13 @@ def heuristic_h2(state):
     # Count blocking vehicles (using a set to avoid double-counting)
     blocking_vehicles = set()
     red_y = red_car['y']
+    # right-end index of red car (first cell to the right is red_x_end)
     red_x_end = red_car['x'] + red_car['length']
-    target_x = state.board_width - 1  # Fixed: should be board_width - 1 (edge)
-    
-    # Check each position from red car end to exit
-    for x in range(red_x_end, target_x):
-        if x < state.board_width:
-            cell = state.board[red_y][x]
-            if cell != '.' and cell != '#' and cell != 'X':
-                # There's a blocking vehicle
-                blocking_vehicles.add(cell)
+    # check every cell to the board edge (cells that must be cleared)
+    for x in range(red_x_end, state.board_width):
+        cell = state.board[red_y][x]
+        if cell != '.' and cell != '#' and cell != 'X':
+            blocking_vehicles.add(cell)
     
     return h1 + len(blocking_vehicles)
 
@@ -243,7 +236,10 @@ def A_star(initial_state, heuristic_function=heuristic_h1):
     
     # while (not Open.empty()) do
     while open_list:
-        # current <- Open.dequeue() /* Choose the node with the lowest cost f */
+        # show progress occasionally so you know it's running
+        if steps and steps % 5000 == 0:
+            print(f"A*: expanded {steps} nodes... (press Ctrl+C to stop)")
+        # current <- Open.dequeue()
         _, _, current = heapq.heappop(open_list)
         current_hash = hash(current.state)
         
