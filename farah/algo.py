@@ -2,42 +2,41 @@ from collections import deque
 from rush_hour_puzzle import RushHourPuzzle
 from node import Node
 
-def bfs(initial_state: RushHourPuzzle):    
-    # Create initial node
+def bfs(initial_state: RushHourPuzzle):
+    
     root = Node(state=initial_state, parent=None, action=None, g=0)
     
-    # Check if already at goal
+    # if (isGoal(init_node.state)) then return init_node
     if root.state.isGoal():
         return root
     
-    # Initialize data structures
+    # Open: queue (FIFO list)
     open_queue = deque([root])
-    closed = set()  # Only track states not nodes
+    
+    # Additional: Track states in Open for fast lookup (optimization)
+    open_set = {initial_state}
+    
+    # Closed: list
+    closed = set()
     
     # For tracking performance
     nodes_expanded = 0
     
-    # Main loop
+    # while (not Open.empty()) do
     while open_queue:
-        # Get next node (FIFO - shallowest first)
+        
+        # current <- Open.dequeue()
         current = open_queue.popleft()
+        open_set.remove(current.state)  # Remove from tracking set
         nodes_expanded += 1
         
-        # Skip if already explored (can happen if we add same state from different parents)
-        if current.state in closed:
-            continue
-            
-        # Mark as explored NOW (after skipping duplicates)
+        # Closed.add(current)
         closed.add(current.state)
         
-        # Get all possible moves from current state
+        # for each (action, successor) in successorsFn(current.state) do
         for action, successor_state in current.state.successorFunction():
             
-            # Skip if already explored
-            if successor_state in closed:
-                continue
-            
-            # Create child node
+            # child <- Node (successor, current, action)
             child = Node(
                 state=successor_state,
                 parent=current,
@@ -45,15 +44,18 @@ def bfs(initial_state: RushHourPuzzle):
                 g=current.g + 1
             )
             
-            # Check if goal BEFORE adding to queue
+            # if (isGoal(child.state)) then return child
             if child.state.isGoal():
                 print(f"Solution found! Nodes expanded: {nodes_expanded}")
                 print(f"Solution depth: {child.g} moves")
                 return child
             
-            # Add to queue
-            open_queue.append(child)
+            # if (child.state not in Closed and not in Open) then
+            if child.state not in closed and child.state not in open_set:
+                # Open.enqueue(child)
+                open_queue.append(child)
+                open_set.add(child.state)  # Track it
     
-    # No solution found
+    # return None
     print(f"No solution exists. Nodes expanded: {nodes_expanded}")
     return None
