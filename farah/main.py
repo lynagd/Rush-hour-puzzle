@@ -30,8 +30,8 @@ for csv_file in csv_files:
     # Check if a solution was found
     if goal_node:
         print("Solution found!")
-        print("Moves to solve:", goal_node.getAction())
-        print("Number of moves:", len(goal_node.getAction()))
+        print("Moves to solve:", goal_node.getSolution())
+        print("Number of moves:", len(goal_node.getSolution()))
         print("Final board:")
         print(goal_node.state)
     else:
