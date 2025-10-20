@@ -121,7 +121,10 @@ class RushHourPuzzle:
                         board_height=self.board_height,
                         board_width=self.board_width
                     )
-                    successor_state.walls = self.walls  # Preserve walls!
+                    # Copy the walls into the new state
+                    successor_state.walls = copy.deepcopy(self.walls)
+                    # Rebuild the board with the walls included
+                    successor_state.setBoard()
                     successors.append(((vid, 'L'), successor_state))
                 
                 # Try moving RIGHT
@@ -134,7 +137,11 @@ class RushHourPuzzle:
                         board_height=self.board_height,
                         board_width=self.board_width
                     )
-                    successor_state.walls = self.walls  # Preserve walls!
+                    # Copy the walls into the new state
+                    successor_state.walls = copy.deepcopy(self.walls)
+                    # Rebuild the board with the walls included
+                    successor_state.setBoard()
+
                     successors.append(((vid, 'R'), successor_state))
             
             else:  # Vertical vehicle
@@ -149,7 +156,11 @@ class RushHourPuzzle:
                         board_height=self.board_height,
                         board_width=self.board_width
                     )
-                    successor_state.walls = self.walls  # Preserve walls!
+                    # Copy the walls into the new state
+                    successor_state.walls = copy.deepcopy(self.walls)
+                    # Rebuild the board with the walls included
+                    successor_state.setBoard()
+
                     successors.append(((vid, 'U'), successor_state))
                 
                 # Try moving DOWN
@@ -162,7 +173,11 @@ class RushHourPuzzle:
                         board_height=self.board_height,
                         board_width=self.board_width
                     )
-                    successor_state.walls = self.walls  # Preserve walls!
+                    # Copy the walls into the new state
+                    successor_state.walls = copy.deepcopy(self.walls)
+                    # Rebuild the board with the walls included
+                    successor_state.setBoard()
+                    
                     successors.append(((vid, 'D'), successor_state))
         
         return successors
@@ -180,11 +195,9 @@ class RushHourPuzzle:
         return True
     
     def __hash__(self):
-        """
-        Create a hash for the state (needed for set/dict operations).
-        """
+       
         # Create a tuple of vehicle positions for hashing
-        positions = tuple((v['id'], v['x'], v['y']) for v in sorted(self.vehicles, key=lambda v: v['id']))
+        positions = tuple((v['id'], v['x'], v['y']) for v in self.vehicles)
         return hash(positions)
     
     def __str__(self):
