@@ -124,11 +124,7 @@ class RushHourPuzzle:
                     # Copy the walls into the new state
                     successor_state.walls = copy.deepcopy(self.walls)
                     # Rebuild the board with the walls included
-<<<<<<< HEAD
                     successor_state.setBoard()                    
-=======
-                    successor_state.setBoard()
->>>>>>> 24cce4b5f5de41790348903ec88c5fb315c7e395
                     successors.append(((vid, 'L'), successor_state))
                 
                 # Try moving RIGHT
@@ -144,12 +140,7 @@ class RushHourPuzzle:
                     # Copy the walls into the new state
                     successor_state.walls = copy.deepcopy(self.walls)
                     # Rebuild the board with the walls included
-<<<<<<< HEAD
                     successor_state.setBoard()                    
-=======
-                    successor_state.setBoard()
-
->>>>>>> 24cce4b5f5de41790348903ec88c5fb315c7e395
                     successors.append(((vid, 'R'), successor_state))
             
             else:  # Vertical vehicle
@@ -167,12 +158,7 @@ class RushHourPuzzle:
                     # Copy the walls into the new state
                     successor_state.walls = copy.deepcopy(self.walls)
                     # Rebuild the board with the walls included
-<<<<<<< HEAD
                     successor_state.setBoard()                    
-=======
-                    successor_state.setBoard()
-
->>>>>>> 24cce4b5f5de41790348903ec88c5fb315c7e395
                     successors.append(((vid, 'U'), successor_state))
                 
                 # Try moving DOWN
@@ -188,12 +174,7 @@ class RushHourPuzzle:
                     # Copy the walls into the new state
                     successor_state.walls = copy.deepcopy(self.walls)
                     # Rebuild the board with the walls included
-<<<<<<< HEAD
                     successor_state.setBoard()                    
-=======
-                    successor_state.setBoard()
-                    
->>>>>>> 24cce4b5f5de41790348903ec88c5fb315c7e395
                     successors.append(((vid, 'D'), successor_state))
         
         return successors

@@ -1,6 +1,5 @@
 """
 Rush Hour Puzzle Solver
-<<<<<<< HEAD
 Main script to run the puzzle solver with BFS and A* algorithms.
 """
 
@@ -17,24 +16,6 @@ def print_solution(solution_node, algorithm_name):
     
     print("\n" + "="*60)
     print(f"{algorithm_name} SOLUTION")
-=======
-Main script to run the puzzle solver with different algorithms.
-"""
-
-from rush_hour_puzzle import RushHourPuzzle
-from search_algorithms import BFS
-from game_interface import visualize_solution
-import time
-
-def print_solution(solution_node):
-    """Print the solution path and actions."""
-    if solution_node is None:
-        print("No solution found!")
-        return
-    
-    print("\n" + "="*60)
-    print("SOLUTION FOUND!")
->>>>>>> 24cce4b5f5de41790348903ec88c5fb315c7e395
     print("="*60)
     
     # Get solution details
@@ -42,13 +23,9 @@ def print_solution(solution_node):
     actions = solution_node.getSolution()
     
     print(f"\nSolution length: {len(actions)} moves")
-<<<<<<< HEAD
     print(f"Path cost (g): {solution_node.g}")
     if hasattr(solution_node, 'f'):
         print(f"Total cost (f): {solution_node.f}")
-=======
-    print(f"Path cost: {solution_node.g}")
->>>>>>> 24cce4b5f5de41790348903ec88c5fb315c7e395
     
     print("\nSolution actions:")
     for i, action in enumerate(actions, 1):
@@ -64,21 +41,14 @@ def print_solution(solution_node):
     print("\n" + "="*60)
 
 
-<<<<<<< HEAD
 def solve_puzzle(csv_file, use_visualization=True, algorithms_to_run='all'):
-=======
-def solve_puzzle(csv_file, use_visualization=True):
->>>>>>> 24cce4b5f5de41790348903ec88c5fb315c7e395
     """
     Solve a Rush Hour puzzle using different algorithms.
     
     Parameters:
     - csv_file: Path to CSV file with puzzle configuration
     - use_visualization: Whether to show Pygame visualization
-<<<<<<< HEAD
     - algorithms_to_run: 'all', 'bfs', 'astar', or list like ['bfs', 'astar_h1']
-=======
->>>>>>> 24cce4b5f5de41790348903ec88c5fb315c7e395
     """
     print("\n" + "="*60)
     print(f"Loading puzzle from: {csv_file}")
@@ -90,7 +60,6 @@ def solve_puzzle(csv_file, use_visualization=True):
     print("\nInitial state:")
     print(initial_state)
     
-<<<<<<< HEAD
     print(f"Board size: {initial_state.board_height}x{initial_state.board_width}")
     print(f"Number of vehicles: {len(initial_state.vehicles)}")
     print(f"Number of walls: {len(initial_state.walls)}")
@@ -98,17 +67,11 @@ def solve_puzzle(csv_file, use_visualization=True):
     # Test if it's already a goal
     if initial_state.isGoal():
         print("\n⚠️  Initial state is already a goal!")
-=======
-    # Test if it's already a goal
-    if initial_state.isGoal():
-        print("Initial state is already a goal!")
->>>>>>> 24cce4b5f5de41790348903ec88c5fb315c7e395
         return
     
     # Dictionary to store results
     results = {}
     
-<<<<<<< HEAD
     # Determine which algorithms to run
     run_bfs = algorithms_to_run == 'all' or 'bfs' in str(algorithms_to_run).lower()
     run_astar = algorithms_to_run == 'all' or 'astar' in str(algorithms_to_run).lower()
@@ -315,60 +278,12 @@ def solve_puzzle(csv_file, use_visualization=True):
             else:
                 chosen_algo = default_algo
         
-=======
-    # ===== BFS Algorithm =====
-    print("\n" + "-"*60)
-    print("Running BFS Algorithm...")
-    print("-"*60)
-    start_time = time.time()
-    bfs_solution, bfs_steps = BFS(initial_state)
-    bfs_time = time.time() - start_time
-    
-    if bfs_solution:
-        results['BFS'] = {
-            'solution': bfs_solution,
-            'steps': bfs_steps,
-            'time': bfs_time,
-            'cost': bfs_solution.g
-        }
-        print(f"✓ Solution found in {bfs_steps} search steps")
-        print(f"✓ Solution cost: {bfs_solution.g} moves")
-        print(f"✓ Time taken: {bfs_time:.4f} seconds")
-    
-    # NOTE: A* runs are intentionally disabled/commented out so only BFS is executed.
-    # If you want to re-enable A*, restore the imports at top and the blocks below.
-    
-    # ===== Comparison =====
-    print("\n" + "="*60)
-    print("ALGORITHM COMPARISON")
-    print("="*60)
-    print(f"{'Algorithm':<15} {'Search Steps':<15} {'Solution Cost':<15} {'Time (s)':<15}")
-    print("-"*60)
-    
-    for algo_name, data in results.items():
-        print(f"{algo_name:<15} {data['steps']:<15} {data['cost']:<15} {data['time']:<15.4f}")
-    
-    # Find best algorithm
-    if results:
-        best_algo = min(results.items(), key=lambda x: x[1]['steps'])
-        print("\n" + "="*60)
-        print(f"🏆 Most efficient: {best_algo[0]} with {best_algo[1]['steps']} search steps")
-        print("="*60)
-    
-    # Show visualization (BFS only)
-    if use_visualization and 'BFS' in results:
-        print("\n" + "="*60)
-        print("VISUALIZATION")
-        print("="*60)
-        print("\nLaunching visualization for BFS...")
->>>>>>> 24cce4b5f5de41790348903ec88c5fb315c7e395
         print("\nControls:")
         print("  SPACE - Start/Stop animation")
         print("  LEFT/RIGHT ARROWS - Step through solution")
         print("  R - Reset to start")
         print("  ESC - Close window")
         
-<<<<<<< HEAD
         print(f"\nLaunching visualization for {chosen_algo}...")
         data = results[chosen_algo]
         
@@ -382,22 +297,12 @@ def solve_puzzle(csv_file, use_visualization=True):
         except Exception as e:
             print(f"⚠️  Visualization error: {e}")
             print("Make sure pygame is properly installed")
-=======
-        data = results['BFS']
-        visualize_solution(
-            initial_state,
-            data['solution'],
-            'BFS',
-            data['steps']
-        )
->>>>>>> 24cce4b5f5de41790348903ec88c5fb315c7e395
 
 
 def main():
     """Main function."""
     print("\n" + "="*60)
     print(" "*15 + "RUSH HOUR PUZZLE SOLVER")
-<<<<<<< HEAD
     print(" "*10 + "BFS and A* with Multiple Heuristics")
     print("="*60)
     
@@ -450,26 +355,6 @@ def main():
         print("  Other lines: vehicle_id,x,y,orientation,length")
         print("  Walls: #,x,y")
         
-=======
-    print("="*60)
-    
-    # Example usage - you can change this path
-    csv_file = "../examples/example1.csv"
-    
-    print("\nYou can solve different puzzles by changing the CSV file.")
-    print(f"Currently using: {csv_file}")
-    
-    custom_file = input("\nEnter CSV file path (or press Enter to use default): ").strip()
-    
-    if custom_file:
-        csv_file = custom_file
-    
-    try:
-        solve_puzzle(csv_file, use_visualization=True)
-    except FileNotFoundError:
-        print(f"\n❌ Error: File '{csv_file}' not found!")
-        print("Please make sure the file exists in the correct location.")
->>>>>>> 24cce4b5f5de41790348903ec88c5fb315c7e395
     except Exception as e:
         print(f"\n❌ Error: {e}")
         import traceback
