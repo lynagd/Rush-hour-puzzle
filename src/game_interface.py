@@ -43,7 +43,7 @@ class RushHourGame:
             'X': (231, 76, 60),  # Red
         }
         self.DEFAULT_CAR_COLOR = (52, 152, 219)  # Blue
-        self.TRUCK_COLOR = (46, 204, 113)  # Green
+        self.TRUCK_COLOR = (52, 152, 219)  # BLUE
         self.WALL_COLOR = (50, 50, 50)
         self.TEXT_COLOR = (50, 50, 50)
         self.EXIT_COLOR = (255, 215, 0)  # Gold
