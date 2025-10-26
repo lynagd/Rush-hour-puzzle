@@ -5,7 +5,11 @@ from node import Node
 
 def BFS(initial_state):
     """
+<<<<<<< HEAD
     Breadth First Search algorithm following the course pseudocode (Figure 1.19).
+=======
+    Breadth-First Search algorithm following the course pseudocode (Figure 1.19).
+>>>>>>> 24cce4b5f5de41790348903ec88c5fb315c7e395
     Explores the shallowest nodes first using a FIFO queue.
     
     Parameters:
@@ -18,12 +22,18 @@ def BFS(initial_state):
     # Open: queue (FIFO list)
     open_list = deque()
     
+<<<<<<< HEAD
     # Closed: set (using set for O(1) lookup)
     closed_set = set()
     
     # FIXED: Track states in open list for O(1) lookup
     open_set = set()
     
+=======
+    # Closed: list (using set for O(1) lookup)
+    closed_set = set()
+    
+>>>>>>> 24cce4b5f5de41790348903ec88c5fb315c7e395
     # init_node <- Node (s, None, None)
     init_node = Node(initial_state, None, None)
     
@@ -34,13 +44,17 @@ def BFS(initial_state):
     
     # Open.enqueue(init_node)
     open_list.append(init_node)
+<<<<<<< HEAD
     open_set.add(hash(init_node.state))
+=======
+>>>>>>> 24cce4b5f5de41790348903ec88c5fb315c7e395
     
     # Closed <- [ ]
     steps = 0
     
     # while (not Open.empty()) do
     while open_list:
+<<<<<<< HEAD
         # Show progress every 1000 nodes for complex puzzles
         if steps > 0 and steps % 1000 == 0:
             print(f"BFS: Expanded {steps} nodes, open list size: {len(open_list)}")
@@ -54,6 +68,13 @@ def BFS(initial_state):
         
         # Closed.add(current)
         closed_set.add(current_hash)
+=======
+        # current <- Open.dequeue() /* Choose the shallowest node in Open */
+        current = open_list.popleft()
+        
+        # Closed.add(current)
+        closed_set.add(hash(current.state))
+>>>>>>> 24cce4b5f5de41790348903ec88c5fb315c7e395
         steps += 1
         
         # for each (action, successor) in successorsFn(current.state) do
@@ -65,12 +86,22 @@ def BFS(initial_state):
             child_hash = hash(child.state)
             
             # if (child.state not in Closed and not in Open) then
+<<<<<<< HEAD
             # Check closed set (O(1))
             if child_hash in closed_set:
                 continue
             
             # FIXED: Check open set (O(1) instead of O(n))
             if child_hash in open_set:
+=======
+            # Check closed set
+            if child_hash in closed_set:
+                continue
+            
+            # Check open list
+            already_in_open = any(hash(node.state) == child_hash for node in open_list)
+            if already_in_open:
+>>>>>>> 24cce4b5f5de41790348903ec88c5fb315c7e395
                 continue
             
             # if (isGoal(child.state)) then return child
@@ -80,14 +111,20 @@ def BFS(initial_state):
             
             # Open.enqueue(child)
             open_list.append(child)
+<<<<<<< HEAD
             open_set.add(child_hash)
+=======
+>>>>>>> 24cce4b5f5de41790348903ec88c5fb315c7e395
     
     # return None
     print("BFS: No solution found!")
     return None, steps
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 24cce4b5f5de41790348903ec88c5fb315c7e395
 def heuristic_h1(state):
     """
     Heuristic 1: Distance from red car 'X' to the exit.
@@ -207,7 +244,11 @@ def heuristic_h3(state):
     
     return h2_value + penalty
 
+<<<<<<< HEAD
 ##changed 
+=======
+
+>>>>>>> 24cce4b5f5de41790348903ec88c5fb315c7e395
 def A_star(initial_state, heuristic_function=heuristic_h1):
     """
     A* Search algorithm following the course pseudocode (Figure 1.29).
@@ -224,6 +265,7 @@ def A_star(initial_state, heuristic_function=heuristic_h1):
     # Open: priorityQueue /* Ordered queue by f */
     open_list = []
     
+<<<<<<< HEAD
     # Closed: set for O(1) lookup
     closed_set = set()
     
@@ -232,6 +274,13 @@ def A_star(initial_state, heuristic_function=heuristic_h1):
     
     # Counter to break ties in priority queue (ensures FIFO for equal f-values)
     counter = 0
+=======
+    # Closed: list
+    closed_set = set()
+    
+    # For tracking nodes in open list (for efficient lookup)
+    open_dict = {}  # Maps state_hash -> (f_value, node)
+>>>>>>> 24cce4b5f5de41790348903ec88c5fb315c7e395
     
     # init_node <- Node (s, None, None)
     init_node = Node(initial_state, None, None)
@@ -245,14 +294,20 @@ def A_star(initial_state, heuristic_function=heuristic_h1):
         return init_node, 0
     
     # Open.insert(init_node)
+<<<<<<< HEAD
     heapq.heappush(open_list, (init_node.f, counter, init_node))
     counter += 1
     open_dict[hash(init_node.state)] = init_node
+=======
+    heapq.heappush(open_list, (init_node.f, id(init_node), init_node))
+    open_dict[hash(init_node.state)] = (init_node.f, init_node)
+>>>>>>> 24cce4b5f5de41790348903ec88c5fb315c7e395
     
     steps = 0
     
     # while (not Open.empty()) do
     while open_list:
+<<<<<<< HEAD
         # Show progress every 1000 nodes
         if steps > 0 and steps % 1000 == 0:
             print(f"A*: Expanded {steps} nodes, open list size: {len(open_list)}")
@@ -266,6 +321,16 @@ def A_star(initial_state, heuristic_function=heuristic_h1):
             continue
         
         # Remove from open_dict
+=======
+        # show progress occasionally so you know it's running
+        if steps and steps % 5000 == 0:
+            print(f"A*: expanded {steps} nodes... (press Ctrl+C to stop)")
+        # current <- Open.dequeue()
+        _, _, current = heapq.heappop(open_list)
+        current_hash = hash(current.state)
+        
+        # Remove from open_dict if still there
+>>>>>>> 24cce4b5f5de41790348903ec88c5fb315c7e395
         if current_hash in open_dict:
             del open_dict[current_hash]
         
@@ -288,6 +353,7 @@ def A_star(initial_state, heuristic_function=heuristic_h1):
             
             child_hash = hash(child.state)
             
+<<<<<<< HEAD
             # Skip if already in closed set
             if child_hash in closed_set:
                 continue
@@ -314,6 +380,36 @@ def A_star(initial_state, heuristic_function=heuristic_h1):
                     # (old entry still in heap but will be skipped due to closed set check)
                     heapq.heappush(open_list, (old_node.f, counter, old_node))
                     counter += 1
+=======
+            # if (child.state not in Open and not in Closed) then
+            if child_hash not in closed_set and child_hash not in open_dict:
+                # Open.insert(child)
+                heapq.heappush(open_list, (child.f, id(child), child))
+                open_dict[child_hash] = (child.f, child)
+            
+            # else if (child.state in Open with a higher value of f) then
+            elif child_hash in open_dict:
+                old_f, old_node = open_dict[child_hash]
+                if child.f < old_f:
+                    # replace that Open node with child
+                    old_node.g = child.g
+                    old_node.parent = child.parent
+                    old_node.action = child.action
+                    old_node.f = child.f
+                    # Update in dictionary
+                    open_dict[child_hash] = (child.f, old_node)
+                    # Re-heapify (push the updated node)
+                    heapq.heappush(open_list, (child.f, id(old_node), old_node))
+            
+            # else if (child.state in Closed with a higher value of f) then
+            elif child_hash in closed_set:
+                # In standard A* with consistent heuristic, this shouldn't happen
+                # But we handle it for completeness
+                # remove that Closed node and Open.insert(child)
+                closed_set.remove(child_hash)
+                heapq.heappush(open_list, (child.f, id(child), child))
+                open_dict[child_hash] = (child.f, child)
+>>>>>>> 24cce4b5f5de41790348903ec88c5fb315c7e395
     
     # return None
     print("A*: No solution found!")
