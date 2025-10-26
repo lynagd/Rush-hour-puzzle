@@ -1,91 +1,59 @@
 from collections import deque
 import heapq
 from node import Node
+from rush_hour_puzzle import RushHourPuzzle 
 
-
-def BFS(initial_state):
-    """
-    Breadth First Search algorithm following the course pseudocode (Figure 1.19).
-    Explores the shallowest nodes first using a FIFO queue.
+def BFS(initial_state, max_nodes=100000):
+    """Optimized BFS implementation."""
     
-    Parameters:
-    - initial_state: RushHourPuzzle instance representing the starting configuration
-    
-    Returns:
-    - goal_node: Node containing the goal state, or None if no solution
-    - steps: Number of nodes expanded
-    """
-    # Open: queue (FIFO list)
     open_list = deque()
-    
-    # Closed: set (using set for O(1) lookup)
     closed_set = set()
-    
-    # FIXED: Track states in open list for O(1) lookup
     open_set = set()
     
-    # init_node <- Node (s, None, None)
-    init_node = Node(initial_state, None, None)
+    init_node = Node(initial_state, parent=None, action=None)
     
-    # if (isGoal(init_node.state)) then return init_node
-    if init_node.state.isGoal():
-        print("BFS: Initial state is goal!")
+    if initial_state.isGoal():
+        print("BFS: Initial state is already the goal!")
         return init_node, 0
     
-    # Open.enqueue(init_node)
+    # Use hash() instead of canonical_key()
+    init_hash = hash(initial_state)
     open_list.append(init_node)
-    open_set.add(hash(init_node.state))
+    open_set.add(init_hash)
     
-    # Closed <- [ ]
     steps = 0
     
-    # while (not Open.empty()) do
     while open_list:
-        # Show progress every 1000 nodes for complex puzzles
         if steps > 0 and steps % 1000 == 0:
-            print(f"BFS: Expanded {steps} nodes, open list size: {len(open_list)}")
+            print(f"BFS: {steps} nodes | Frontier: {len(open_list)}")
         
-        # current <- Open.dequeue() /* Choose the shallowest node in Open */
         current = open_list.popleft()
         current_hash = hash(current.state)
         
-        # Remove from open_set when dequeued
         open_set.discard(current_hash)
-        
-        # Closed.add(current)
         closed_set.add(current_hash)
         steps += 1
         
-        # for each (action, successor) in successorsFn(current.state) do
+        if steps > max_nodes:
+            print(f"BFS: Max nodes ({max_nodes:,}) reached. Try A*!")
+            return None, steps
+        
         for action, successor_state in current.state.successorFunction():
-            # child <- Node (successor, current, action)
-            child = Node(successor_state, current, action)
+            child = Node(successor_state, parent=current, action=action)
+            child_hash = hash(successor_state)
             
-            # Check if state already visited
-            child_hash = hash(child.state)
-            
-            # if (child.state not in Closed and not in Open) then
-            # Check closed set (O(1))
-            if child_hash in closed_set:
+            if child_hash in closed_set or child_hash in open_set:
                 continue
             
-            # FIXED: Check open set (O(1) instead of O(n))
-            if child_hash in open_set:
-                continue
-            
-            # if (isGoal(child.state)) then return child
-            if child.state.isGoal():
-                print(f"BFS: Solution found in {steps} steps!")
+            if successor_state.isGoal():
+                print(f"BFS: Solution found in {steps:,} steps!")
                 return child, steps
             
-            # Open.enqueue(child)
             open_list.append(child)
             open_set.add(child_hash)
     
-    # return None
-    print("BFS: No solution found!")
+    print(f"BFS: No solution found after {steps:,} nodes")
     return None, steps
-
 
 
 def heuristic_h1(state):
