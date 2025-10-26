@@ -4,57 +4,58 @@ from node import Node
 from rush_hour_puzzle import RushHourPuzzle 
 
 def BFS(initial_state, max_nodes=100000):
-    """Optimized BFS implementation."""
+    """Best BFS implementation combining all good features."""
     
     open_list = deque()
     closed_set = set()
     open_set = set()
     
-    init_node = Node(initial_state, parent=None, action=None)
+    init_node = Node(initial_state, None, None)
     
     if initial_state.isGoal():
-        print("BFS: Initial state is already the goal!")
+        print("BFS: Initial state is goal!")
         return init_node, 0
     
-    # Use hash() instead of canonical_key()
-    init_hash = hash(initial_state)
+    # Use canonical_key for reliability
+    init_key = initial_state.canonical_key()
     open_list.append(init_node)
-    open_set.add(init_hash)
+    open_set.add(init_key)
     
     steps = 0
     
     while open_list:
+        # Progress every 1000 nodes
         if steps > 0 and steps % 1000 == 0:
-            print(f"BFS: {steps} nodes | Frontier: {len(open_list)}")
+            print(f"BFS: {steps} nodes | open list size: {len(open_list)}")
         
         current = open_list.popleft()
-        current_hash = hash(current.state)
+        current_key = current.state.canonical_key()
         
-        open_set.discard(current_hash)
-        closed_set.add(current_hash)
+        open_set.discard(current_key)
+        closed_set.add(current_key)
         steps += 1
         
+        # Safety limit
         if steps > max_nodes:
-            print(f"BFS: Max nodes ({max_nodes:,}) reached. Try A*!")
+            print(f"BFS: Max nodes ({max_nodes}) reached. Try A*!")
             return None, steps
         
         for action, successor_state in current.state.successorFunction():
-            child = Node(successor_state, parent=current, action=action)
-            child_hash = hash(successor_state)
+            child = Node(successor_state, current, action)
+            child_key = successor_state.canonical_key()
             
-            if child_hash in closed_set or child_hash in open_set:
+            if child_key in closed_set or child_key in open_set:
                 continue
             
             if successor_state.isGoal():
-                print(f"BFS: Solution found in {steps:,} steps!")
+                print(f"BFS: Solution in {steps} steps!")
                 return child, steps
             
             open_list.append(child)
-            open_set.add(child_hash)
+            open_set.add(child_key)
     
-    print(f"BFS: No solution found after {steps:,} nodes")
+    print("BFS: No solution found!")
     return None, steps
-
 
 def heuristic_h1(state):
     """

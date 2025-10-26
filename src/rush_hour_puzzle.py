@@ -205,3 +205,11 @@ class RushHourPuzzle:
         for row in self.board:
             result += " ".join(row) + "\n"
         return result
+    
+    def canonical_key(self):
+
+    # Sort vehicles by ID for consistency
+        positions = [(v['id'], v['x'], v['y']) 
+                for v in sorted(self.vehicles, key=lambda v: v['id'])]
+        
+        return '_'.join(f"{vid}{x}{y}" for vid, x, y in positions)
